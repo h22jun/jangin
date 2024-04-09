@@ -2,59 +2,71 @@ import logo from './logo.svg';
 import {Button, Navbar, Container, Nav, NavDropdown, Row, Col} from 'react-bootstrap';
 import './App.css';
 import { useState } from 'react';
-
-let [shoes] = useState()
+import data from './data.js';
+import Detail from './Detail.js';
+import Menubar from './Menubar.js';
+import Event from './Event.js';
+import React from 'react';
+import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom';
 
 function App() {
+  let [shoes] = useState(data)
+
   return (
     <>
-    <Navbar expand="lg" className="bg-body-tertiary">
-    <Container>
-      <Navbar.Brand href="#home">미르존</Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="me-auto">
-          <Nav.Link href="#home">전체상품</Nav.Link>
-          <Nav.Link href="#link">공지사항</Nav.Link>
-          <NavDropdown title="메뉴" id="basic-nav-dropdown">
-            <NavDropdown.Item href="#action/3.1">man</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.2">
-              woman
-            </NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.3">child</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="#action/3.4">
-              고객센터
-            </NavDropdown.Item>
-          </NavDropdown>  
-        </Nav>
-      </Navbar.Collapse>
-    </Container>
-  </Navbar>
+    <Routes>
+      <Route path="/" element={<>
+        <Menubar/>
+        <div className='main-bg'></div>
+        <Row>
+        <Card shoes={shoes}></Card>
+        </Row>
+      </>}/>
+
+      <Route path="/detail" element={<>
+        <Menubar/>
+  <Detail element={shoes={shoes}}/>
+      </>}/>
+        <Route path='/event' element={<><Menubar/><Event/></>}>
+          <Route path='one' element={<div>
+            <p>첫 주문시 양배추즙 서비스</p>
+          </div>}/>
+          <Route path='two' element={<div>
+            <p>생일기념 쿠폰 받기</p>
+          </div>}/>
+
+        </Route>
 
 
-<div className='main-bg'></div>
-<Row>
-        <Col sm>
-          <img src='https://codingapple1.github.io/shop/shoes1.jpg' width="80%"/>
-          <h4>상품명</h4>
-          <p>상세설명</p>
-        </Col>
-        <Col sm>          
-        <img src='https://codingapple1.github.io/shop/shoes2.jpg' width="80%"/>
-          <h4>상품명</h4>
-          <p>상세설명</p>
-          </Col>
-        <Col sm>         
-         <img src='https://codingapple1.github.io/shop/shoes3.jpg' width="80%"/>
-          <h4>상품명</h4>
-          <p>상세설명</p>
-          </Col>
-</Row>
+
+
+    </Routes>
+
 
 
 </>
 
 )}
+
+
+function Card(props){
+  return (
+    <React.Fragment >
+      {props.shoes.map((a, i) => (
+        <Col sm key={a.id}>
+          <img src={`https://codingapple1.github.io/shop/shoes${a.id+1}.jpg`} width="80%"/>
+          <h4>{a.title}</h4>
+          <p>{a.price}</p>
+          <p>{a.content}</p>
+          </Col>
+      ))}
+      </React.Fragment>
+    
+  );
+}
+
+
+
+
 
 export default App;
