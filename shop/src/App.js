@@ -7,7 +7,7 @@ import Detail from './Detail.js';
 import Menubar from './Menubar.js';
 import Event from './Event.js';
 import React from 'react';
-import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom';
+import {Routes, Route, Link, Outlet, useNavigate} from 'react-router-dom';
 
 function App() {
   let [shoes] = useState(data)
@@ -23,9 +23,9 @@ function App() {
         </Row>
       </>}/>
 
-      <Route path="/detail" element={<>
+      <Route path="/detail/:id" element={<>
         <Menubar/>
-  <Detail element={shoes={shoes}}/>
+  <Detail shoes={shoes}/>
       </>}/>
         <Route path='/event' element={<><Menubar/><Event/></>}>
           <Route path='one' element={<div>
@@ -51,13 +51,16 @@ function App() {
 
 function Card(props){
   return (
+    
     <React.Fragment >
       {props.shoes.map((a, i) => (
         <Col sm key={a.id}>
+          <Link to={`/detail/${a.id}`}>
           <img src={`https://codingapple1.github.io/shop/shoes${a.id+1}.jpg`} width="80%"/>
           <h4>{a.title}</h4>
           <p>{a.price}</p>
           <p>{a.content}</p>
+          </Link>
           </Col>
       ))}
       </React.Fragment>
