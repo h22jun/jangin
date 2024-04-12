@@ -5,6 +5,14 @@
   background-position: center;
 }
 
+.start-ani{
+  opacity: 0%;
+}
+
+.end-ani{
+  opacity: 100%;
+  transition: 1s;
+}
 
 .event-bg{
   text-align: center;

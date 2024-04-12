@@ -1,9 +1,12 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import {Nav} from 'react-bootstrap';
 
 function Detail(props){
   let [alertVisible, setAlertVisible] = useState(true); // 상태 이름 변경
   const [value, setValue] = useState(''); // value 상태 초기화
+  let [tab, setTab] = useState(0);
+  let [opa, setOpa] = useState('');
 
   const handleChange = (event) => {
     setValue(event.target.value); // 입력값으로 value 상태 업데이트
@@ -19,6 +22,13 @@ function Detail(props){
     }
   }, [value]); // value 상태의 변화를 감지
 
+  useEffect(()=>{
+    setTimeout(()=>{ setOpa('end-ani') }, 10)
+  return ()=>{
+    setOpa('')
+  }
+  }, [])
+
   let {id} = useParams();
   let 찾은상품 = props.shoes.find((x) => x.id == id);
 
@@ -27,7 +37,9 @@ function Detail(props){
   }
 
   return(
-    <div className="container">
+    <div className={`container start-ani ${opa}`}>
+
+      
       { 
         alertVisible ?
         <div id='alert-second' className="alert alert-warning">
@@ -47,8 +59,49 @@ function Detail(props){
           <button className="btn btn-danger">주문하기</button> 
         </div>
       </div>
-    </div> 
+
+      <Nav variant="tabs"  defaultActiveKey="link0">
+    <Nav.Item>
+      <Nav.Link eventKey="link0" onClick={()=>{
+        setTab(0)
+      }}
+      >상세보기</Nav.Link>
+    </Nav.Item>
+    <Nav.Item>
+      <Nav.Link eventKey="link1" onClick={()=>{
+        setTab(1)
+      }}>리뷰</Nav.Link>
+    </Nav.Item>
+    <Nav.Item>
+      <Nav.Link eventKey="link2" onClick={()=>{
+        setTab(2)
+      }}>Q&A</Nav.Link>
+    </Nav.Item>
+</Nav>
+<TabContent tab={tab} shoes={props.shoes}/>
+
+
+  
+  </div> 
   );
+  
 }
+let TabContent = function TabContent(props){
+  return[
+  <div>
+    {props.shoes[0].title}
+    이 상품은 화이트와 블랙이 조화롭게 들어가있는 가죽신발인데 통기성이 좀 떨어짐
+  </div>, 
+  <div>
+    이거 이쁜데 발냄새남
+  </div>, 
+  <div>
+    재입고 언제됨?
+  </div>
+  ][props.tab]
+}
+
+
+
 
 export default Detail;

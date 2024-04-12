@@ -7,10 +7,13 @@ import Detail from './Detail.js';
 import Menubar from './Menubar.js';
 import Event from './Event.js';
 import React from 'react';
+import axios from 'axios';
 import {Routes, Route, Link, Outlet, useNavigate} from 'react-router-dom';
+import Cart from './Cart.js';
 
 function App() {
-  let [shoes] = useState(data)
+  let [shoes, setShoes] = useState(data)
+  let [더보기count, setCount] = useState(2)
 
   return (
     <>
@@ -19,7 +22,7 @@ function App() {
         <Menubar/>
         <div className='main-bg'></div>
         <Row>
-        <Card shoes={shoes}></Card>
+        <Card shoes={shoes} setShoes={setShoes} 더보기count={더보기count} setCount={setCount}></Card>
         </Row>
       </>}/>
 
@@ -36,12 +39,11 @@ function App() {
           </div>}/>
 
         </Route>
+        <Route path='/cart' element={<Cart/>}>
 
-
-
-
-    </Routes>
-
+        </Route>
+ </Routes>
+            
 
 
 </>
@@ -51,10 +53,11 @@ function App() {
 
 function Card(props){
   return (
+    <>
     
     <React.Fragment >
       {props.shoes.map((a, i) => (
-        <Col sm key={a.id}>
+        <Col sm={4} key={a.id}>
           <Link to={`/detail/${a.id}`}>
           <img src={`https://codingapple1.github.io/shop/shoes${a.id+1}.jpg`} width="80%"/>
           <h4>{a.title}</h4>
@@ -63,8 +66,30 @@ function Card(props){
           </Link>
           </Col>
       ))}
+      
       </React.Fragment>
-    
+
+      {
+  props.더보기count <= 3 && (
+    <button onClick={() => {
+      //로딩중~
+      axios.get(`https://codingapple1.github.io/shop/data${props.더보기count}.json`).then((결과) => {
+        console.log(결과.data);
+        props.setShoes(currentData => [...currentData, ...결과.data]);
+        props.setCount((a) => a + 1);
+        console.log(props.더보기count);
+        //로딩중~ 숨기기
+      }).catch(() => {
+        //로딩중~ 숨기기
+        console.log('실패함 ㅅㄱ');
+      });
+    }}>
+      더보기
+    </button>
+  )
+}
+
+    </>
   );
 }
 
