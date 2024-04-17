@@ -1,8 +1,12 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {Nav} from 'react-bootstrap';
+import {useDispatch, useSelector} from "react-redux";
+import { addBasket } from "./store.js";
+
 
 function Detail(props){
+  const dispatch = useDispatch(); 
   let [alertVisible, setAlertVisible] = useState(true); // 상태 이름 변경
   const [value, setValue] = useState(''); // value 상태 초기화
   let [tab, setTab] = useState(0);
@@ -47,6 +51,7 @@ function Detail(props){
         </div>
         : null
       }
+      
       <div className="row">
         <div className="col-md-6">
           <img src={`https://codingapple1.github.io/shop/shoes${찾은상품.id+1}.jpg`} width="100%" />
@@ -56,7 +61,13 @@ function Detail(props){
           <h4 className="pt-5">{찾은상품.title}</h4>
           <p>{찾은상품.content}</p>
           <p>{찾은상품.price}원</p>
-          <button className="btn btn-danger">주문하기</button> 
+          <button className="btn btn-danger" onClick={()=>{
+  dispatch(addBasket([{
+    id: 찾은상품.id,
+    name: 찾은상품.title, // 'title' 대신 'name'을 사용
+  }]))
+}}>주문하기</button>
+
         </div>
       </div>
 

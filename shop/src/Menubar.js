@@ -21,7 +21,7 @@ return(
             <NavDropdown.Item href="#action/3.2">
               woman
             </NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.3">child</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=> {navigate('/cart')}}>CART</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="#action/3.4">
               고객센터
