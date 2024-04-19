@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import {Button, Navbar, Container, Nav, NavDropdown, Row, Col} from 'react-bootstrap';
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import data from './data.js';
 import Detail from './Detail.js';
 import Menubar from './Menubar.js';
@@ -11,9 +11,11 @@ import axios from 'axios';
 import {Routes, Route, Link, Outlet, useNavigate} from 'react-router-dom';
 import Cart from './Cart.js';
 
+
 function App() {
   let [shoes, setShoes] = useState(data)
   let [더보기count, setCount] = useState(2)
+
 
   return (
     <>
@@ -22,14 +24,16 @@ function App() {
         <Menubar/>
         <div className='main-bg'></div>
         <Row>
-        <Card shoes={shoes} setShoes={setShoes} 더보기count={더보기count} setCount={setCount}></Card>
+        <Card  shoes={shoes} setShoes={setShoes} 더보기count={더보기count} setCount={setCount}></Card>
         </Row>
       </>}/>
 
-      <Route path="/detail/:id" element={<>
-        <Menubar/>
-  <Detail shoes={shoes}/>
-      </>}/>
+      <Route path="/detail/:id"
+      element={
+       <>
+       <Menubar/>
+        <Detail shoes={shoes} watchedObj={watchedObj}/></>
+      }/>
         <Route path='/event' element={<><Menubar/><Event/></>}>
           <Route path='one' element={<div>
             <p>첫 주문시 양배추즙 서비스</p>
@@ -55,9 +59,9 @@ function Card(props){
   return (
     <>
     
-    <React.Fragment >
+    <React.Fragment  >
       {props.shoes.map((a, i) => (
-        <Col sm={4} key={a.id}>
+        <Col a={a} sm={4} key={a.id}> 
           <Link to={`/detail/${a.id}`}>
           <img src={`https://codingapple1.github.io/shop/shoes${a.id+1}.jpg`} width="80%"/>
           <h4>{a.title}</h4>

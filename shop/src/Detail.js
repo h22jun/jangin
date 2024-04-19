@@ -4,13 +4,17 @@ import {Nav} from 'react-bootstrap';
 import {useDispatch, useSelector} from "react-redux";
 import { addBasket } from "./store.js";
 
-
 function Detail(props){
   const dispatch = useDispatch(); 
   let [alertVisible, setAlertVisible] = useState(true); // 상태 이름 변경
   const [value, setValue] = useState(''); // value 상태 초기화
   let [tab, setTab] = useState(0);
   let [opa, setOpa] = useState('');
+  let [watchedObj, setWatchedObj] = useState([]);
+
+  let {id} = useParams();
+  let 찾은상품 = props.shoes.find((x) => x.id == id);
+
 
   const handleChange = (event) => {
     setValue(event.target.value); // 입력값으로 value 상태 업데이트
@@ -21,6 +25,18 @@ function Detail(props){
   }, []);
 
   useEffect(() => {
+    // watchedObj 상태를 로컬 스토리지에 저장
+    let itemId = 찾은상품.id;
+    console.log(itemId);
+    // setWatchedObj(itemId);
+    let newWatchedObj = new Set(watchedObj);
+    newWatchedObj.add(itemId);
+    localStorage.setItem('watched', JSON.stringify(newWatchedObj));
+  }, [watchedObj]); // watchedObj가 변경될 때마다 실행
+
+
+
+  useEffect(() => {
     if (isNaN(value) && value.trim() !== '') { // value가 숫자가 아니고, 공백이 아닌 경우에만 alert 실행
       alert('숫자만 입력해주세요.');
     }
@@ -28,13 +44,15 @@ function Detail(props){
 
   useEffect(()=>{
     setTimeout(()=>{ setOpa('end-ani') }, 10)
+    
+
   return ()=>{
     setOpa('')
+
   }
   }, [])
 
-  let {id} = useParams();
-  let 찾은상품 = props.shoes.find((x) => x.id == id);
+  
 
   if (!찾은상품) {
     return <div className="container">해당 상품을 찾을 수 없습니다.</div>;
